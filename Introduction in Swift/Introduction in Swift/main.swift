@@ -12,3 +12,5 @@ import Foundation
 
 // Second lesson
 //homeworkPresentation(for: 2, homework: lesson2)
+
+print(porshe911GT3.printInfo())
