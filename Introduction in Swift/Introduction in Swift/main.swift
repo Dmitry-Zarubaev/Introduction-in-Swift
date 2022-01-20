@@ -7,10 +7,13 @@
 
 import Foundation
 
+
 // First lesson
 //homeworkPresentation(for: 1, homework: lesson1)
 
 // Second lesson
 //homeworkPresentation(for: 2, homework: lesson2)
 
-print(porshe911GT3.printInfo())
+// Third lesson
+homeworkPresentation(for: 3, homework: lesson3)
+

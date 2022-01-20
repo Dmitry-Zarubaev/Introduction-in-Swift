@@ -59,6 +59,26 @@ func getDoubleFromUser(message: String) -> Double {
     getDoubleFromUserIf(message: message, condition: ({_ in true}))
 }
 
+func getStringFromUserIf(message: String, where condition: (String) -> Bool) -> String {
+    var string: String?
+    
+    repeat {
+        print(message)
+        
+        if let input = readLine() {
+            if condition(input) {
+                string = input
+            } else {
+                print("This input isn't satisfy the condition!")
+            }
+        } else {
+            print("Incorrect input!")
+        }
+    } while (string == nil)
+    
+    return string!
+}
+
 func getOrdinal(number: Int) -> String {
     switch number {
         case 0:

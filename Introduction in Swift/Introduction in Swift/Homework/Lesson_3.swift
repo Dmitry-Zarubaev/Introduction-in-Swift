@@ -18,9 +18,21 @@ enum EngineAction: String {
 }
 
 enum LuggageAction {
-    case PlaceIn(volume: Int)
-    case TakeFrom(volume: Int)
+    case PlaceIn(volume: Int = 0)
+    case TakeFrom(volume: Int = 0)
+    
+    mutating func getValue() {
+        let value = getIntFromUserIf(message: "Please, specify the value of the luggage:", condition: {$0 > 0})
+        switch self {
+        case .PlaceIn(_):
+            self = .PlaceIn(volume: value)
+        case .TakeFrom(_):
+            self = .TakeFrom(volume: value)
+        }
+    }
 }
+
+
 
 enum WheelDriveLayout: String {
     case Front
@@ -72,6 +84,10 @@ struct Engine {
     }
 }
 
+struct TruckVehicle {
+    
+}
+
 struct SportCar {
     let manufacturer: String
     let model: String
@@ -104,15 +120,15 @@ struct SportCar {
         print(message)
     }
     
-    public func printState() -> Void {
+    public mutating func printState() -> Void {
         let occupation: String
-        switch trunkOccupation {
+        switch self.trunkOccupation {
             case let x where x == trunkVolume:
                 occupation = "trunk is full"
             case let x where x == 0:
                 occupation = "trunk is empty"
             default:
-                occupation = "trunk has luggage of volume in \(trunkOccupation) liters"
+                occupation = "trunk has luggage of volume in \(self.trunkOccupation) liters"
         }
         print("Glass windows are \(isGlassWindowRaised ? "raised" : "lowered"), the engine \(isEngineStarted ? "is working" : "turned off"), the \(occupation).")
     }
@@ -120,11 +136,11 @@ struct SportCar {
     public mutating func actWithGlassWindow(action: GlassWindowAction) -> Void {
         switch action {
             case .Lower:
-                print(isGlassWindowRaised ? "Glass windows have been lowered!" : "It's already lowered!")
-                self.isGlassWindowRaised = false
+            print(isGlassWindowRaised ? "Glass windows have been lowered!" : "It's already lowered!")
+                isGlassWindowRaised = false
             case .Raise:
-                print(isGlassWindowRaised ? "It's already raised!" : "Glass windows have been raised!")
-                self.isGlassWindowRaised = true
+            print(isGlassWindowRaised ? "It's already raised!" : "Glass windows have been raised!")
+                isGlassWindowRaised = true
         }
     }
     
@@ -132,10 +148,10 @@ struct SportCar {
         switch action {
             case .Start:
                 print(isEngineStarted ? "The engine is already working!" : "The engine has started fine! Listen how it roars!")
-                self.isEngineStarted = true
+                isEngineStarted = true
             case .TurnOff:
                 print(isEngineStarted ? "The engine is turned off now!" : "The engine is already stopped and was cold for a long time!")
-                self.isEngineStarted = false
+                isEngineStarted = false
         }
     }
     
@@ -143,15 +159,17 @@ struct SportCar {
         switch action {
             case .PlaceIn(let volume):
                 if (trunkOccupation + volume > trunkVolume) {
-                    print("You can't place so much luggage in this trunk! Take less on \(trunkVolume - trunkOccupation) litres.")
+                    print("You can't place so much luggage in this trunk! Take less on \(trunkOccupation + volume - trunkVolume) litres.")
+                } else if (volume <= 0) {
+                    print("Are you kidding?!")
                 } else {
-                    self.trunkOccupation += volume
+                    trunkOccupation += volume
                     print("Your luggage in the trunk now.")
                 }
             case .TakeFrom(let volume):
                 if (trunkOccupation - volume < 0) {
-                    self.trunkOccupation = 0
                     print("Hey! You're asking too much! Take your \(trunkOccupation) litres of luggage and get out of here!")
+                    trunkOccupation = 0
                 } else if (trunkOccupation == 0) {
                     print("The trunk is empty. You can't take anything from it.")
                 } else {
@@ -163,6 +181,80 @@ struct SportCar {
     
 }
 
-// https://auto.ru/catalog/cars/porsche/911_gt3/22776686/22776768/specifications/
-let porsheEngine: Engine = Engine(gasType: .Gasoline, ignitionType: .SparkIgnition, combustionChamberVolume: 3996, cylinders: 6, cylinderConfig: .Opposed, maxPower: (510, 8400), maxTorque: (470, 6100))
-var porshe911GT3: SportCar = SportCar(manufacturer: "Porshe", model: "911 GT3 (992 body)", year: 2021, trunkVolume: 132, driveLayout: .Rear, enginePosition: .Rear, engine: porsheEngine)
+func handleSportCar() -> Void {
+    print("We are going to hanging over with a nice sport car!")
+    
+    var isHandling: Bool = true
+    
+    // https://auto.ru/catalog/cars/porsche/911_gt3/22776686/22776768/specifications/
+    let porsheEngine: Engine = Engine(gasType: .Gasoline, ignitionType: .SparkIgnition, combustionChamberVolume: 3996, cylinders: 6, cylinderConfig: .Opposed, maxPower: (510, 8400), maxTorque: (470, 6100))
+    var porshe911GT3: SportCar = SportCar(manufacturer: "Porshe", model: "911 GT3 (992 body)", year: 2021, trunkVolume: 132, driveLayout: .Rear, enginePosition: .Rear, engine: porsheEngine)
+    
+    let glassAction: () -> Void = {
+        let message: String = "Please, write what you want to do (\(GlassWindowAction.Raise.rawValue)/\(GlassWindowAction.Lower.rawValue)):"
+        
+        switch getStringFromUserIf(message: message, where: {s in s.lowercased() == GlassWindowAction.Raise.rawValue || s.lowercased() == GlassWindowAction.Lower.rawValue}) {
+            case let x where x.lowercased() == GlassWindowAction.Raise.rawValue:
+                porshe911GT3.actWithGlassWindow(action: .Raise)
+            case let x where x.lowercased() == GlassWindowAction.Lower.rawValue:
+                porshe911GT3.actWithGlassWindow(action: .Lower)
+            default:
+                print("How did you do it?!")
+        }
+    }
+    
+    let engineAction: () -> Void = {
+        let message: String = "Please, write what you want to do (\(EngineAction.Start.rawValue)/\(EngineAction.TurnOff.rawValue)):"
+        
+        switch getStringFromUserIf(message: message, where: {s in s.lowercased() == EngineAction.Start.rawValue || s.lowercased() == EngineAction.TurnOff.rawValue}) {
+            case let x where x.lowercased() == EngineAction.Start.rawValue:
+                porshe911GT3.actWithEngine(action: .Start)
+            case let x where x.lowercased() == EngineAction.TurnOff.rawValue:
+                porshe911GT3.actWithEngine(action: .TurnOff)
+            default:
+                print("How did you do it?!")
+        }
+    }
+    
+    let luggageAction: () -> Void = {
+        let options: Array<(description: String, action: LuggageAction)> = [
+            ("1. Take the luggage from the trunk", .TakeFrom()),
+            ("2. Place the luggae into the trunk", .PlaceIn())
+        ]
+
+        var message: String = "Please, choose one of the follwing options:\n"
+        for option in options {
+            message += "\t\(option.description)\n"
+        }
+        
+        let optionIndex = getIntFromUserIf(message: message, condition: {$0 > 0 && $0 <= options.count}) - 1
+        var action: LuggageAction = options[optionIndex].action
+        action.getValue()
+        porshe911GT3.getIntoTrunk(action: action)
+    }
+    
+    let actions: Array<(description: String, action: () -> Void)> = [
+        ("1. Action with the glass windows", glassAction),
+        ("2. Action with the engine", engineAction),
+        ("3. Action with the trunk", luggageAction),
+        ("4. Get car's info", porshe911GT3.printInfo),
+        ("5. Get car's state", {porshe911GT3.printState()}),
+        ("6. Exit", {isHandling = false})
+    ]
+    var iterMessage: String = "\nPlease, choose one of the action below:\n"
+    for action in actions {
+        iterMessage += "\t\(action.description)\n"
+    }
+    
+
+    while isHandling {
+        let actionIndex: Int = getIntFromUserIf(message: iterMessage, condition: {input in input > 0 && input <= actions.count})
+        let currentAction: () -> Void = actions[actionIndex - 1].action
+        
+        currentAction()
+    }
+}
+
+let lesson3: Array<(String, () -> Void)> = [
+    ("1. All six tasks in one handling of a sport car", handleSportCar)
+]
