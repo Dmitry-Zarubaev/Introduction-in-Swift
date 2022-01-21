@@ -2,7 +2,7 @@
 //  Lesson_1.swift
 //  Introduction in Swift
 //
-//  Created by Дмитрий Зарубаев on 18.01.2022.
+//  Created by Дмитрий Зарубаев on 11.01.2022.
 //
 
 import Foundation
