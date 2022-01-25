@@ -17,12 +17,12 @@ enum EngineAction: String {
     case TurnOff = "turn off"
 }
 
-enum LuggageAction {
+enum PayloadAction {
     case PlaceIn(volume: Int = 0)
     case TakeFrom(volume: Int = 0)
     
     mutating func getValue() {
-        let value = getIntFromUserIf(message: "Please, specify the value of the luggage:", condition: {$0 > 0})
+        let value = getIntFromUserIf(message: "Please, specify the value of the payload:", condition: {$0 > 0})
         switch self {
         case .PlaceIn(_):
             self = .PlaceIn(volume: value)
@@ -66,6 +66,7 @@ enum CylinderConfiguration: String {
 }
 
 struct Engine {
+    let engineNumber: String
     let gasType: EngineGasType
     let ignitionType: IgnitionType
     let combustionChamberVolume: Int // qubicle centimeters
@@ -75,12 +76,28 @@ struct Engine {
     let maxPower: (power: Int, rpm: Int) // Forse power at RPM
     let maxTorque: (torque: Int, rpm: Int) // H*m at RPM
     
-    public func getInfo(returnIt: Bool) -> String {
-        """
-        It is \(gasType.rawValue.lowercased()) engine with \(ignitionType.rawValue.lowercased()).
-        It have \(cylinders) \(cylinderConfig.rawValue.lowercased()) cylinders with total volume of \(combustionChamberVolume) qubicle cantimeters"
-        The engine's max power is \(maxPower.power) hp at \(maxPower.rpm) rpm and its max torque is \(maxTorque.torque) at \(maxTorque.rpm) rpm
-        """
+    public func getInfo() -> String {
+        if isValidEngine() {
+            return """
+            It is \(gasType.rawValue.lowercased()) engine with \(ignitionType.rawValue.lowercased()). Serial number is \(engineNumber.isEmpty ? "unknown" : engineNumber).
+            It have \(cylinders) \(cylinderConfig.rawValue.lowercased()) cylinders with total volume of \(combustionChamberVolume) qubicle cantimeters"
+            The engine's max power is \(maxPower.power) hp at \(maxPower.rpm) rpm and its max torque is \(maxTorque.torque) at \(maxTorque.rpm) rpm
+            """
+        } else {
+            return "Sorry, this engine has had some invalid parameters"
+        }
+    }
+    
+    private func isValidPower() -> Bool {
+        return maxPower.power > 0 && maxPower.rpm > 0
+    }
+    
+    private func isValidTorque() -> Bool {
+        return maxTorque.torque > 0 && maxTorque.rpm > 0
+    }
+    
+    public func isValidEngine() -> Bool {
+        return cylinders > 0 && combustionChamberVolume > 0 && isValidPower() && isValidTorque()
     }
 }
 
@@ -115,7 +132,7 @@ struct SportCar {
         let message = """
         \(model) car was made by \(manufacturer) in \(year). Its trunk has volume of \(trunkVolume) liters.
         The engine placed in the \(enginePosition.rawValue.lowercased()) of its body and the car has the \(driveLayout.rawValue.lowercased()) wheel drive layout.
-        About the car's engine. \(engine.getInfo(returnIt: true)).
+        About the car's engine. \(engine.getInfo()).
         """
         print(message)
     }
@@ -155,7 +172,7 @@ struct SportCar {
         }
     }
     
-    public mutating func getIntoTrunk(action: LuggageAction) {
+    public mutating func getIntoTrunk(action: PayloadAction) {
         switch action {
             case .PlaceIn(let volume):
                 if (trunkOccupation + volume > trunkVolume) {
@@ -187,7 +204,7 @@ func handleSportCar() -> Void {
     var isHandling: Bool = true
     
     // https://auto.ru/catalog/cars/porsche/911_gt3/22776686/22776768/specifications/
-    let porsheEngine: Engine = Engine(gasType: .Gasoline, ignitionType: .SparkIgnition, combustionChamberVolume: 3996, cylinders: 6, cylinderConfig: .Opposed, maxPower: (510, 8400), maxTorque: (470, 6100))
+    let porsheEngine: Engine = Engine(engineNumber: "741490", gasType: .Gasoline, ignitionType: .SparkIgnition, combustionChamberVolume: 3996, cylinders: 6, cylinderConfig: .Opposed, maxPower: (510, 8400), maxTorque: (470, 6100))
     var porshe911GT3: SportCar = SportCar(manufacturer: "Porshe", model: "911 GT3 (992 body)", year: 2021, trunkVolume: 132, driveLayout: .Rear, enginePosition: .Rear, engine: porsheEngine)
     
     let glassAction: () -> Void = {
@@ -216,8 +233,8 @@ func handleSportCar() -> Void {
         }
     }
     
-    let luggageAction: () -> Void = {
-        let options: Array<(description: String, action: LuggageAction)> = [
+    let payloadAction: () -> Void = {
+        let options: Array<(description: String, action: PayloadAction)> = [
             ("1. Take the luggage from the trunk", .TakeFrom()),
             ("2. Place the luggae into the trunk", .PlaceIn())
         ]
@@ -228,7 +245,7 @@ func handleSportCar() -> Void {
         }
         
         let optionIndex = getIntFromUserIf(message: message, condition: {$0 > 0 && $0 <= options.count}) - 1
-        var action: LuggageAction = options[optionIndex].action
+        var action: PayloadAction = options[optionIndex].action
         action.getValue()
         porshe911GT3.getIntoTrunk(action: action)
     }
@@ -236,7 +253,7 @@ func handleSportCar() -> Void {
     let actions: Array<(description: String, action: () -> Void)> = [
         ("1. Action with the glass windows", glassAction),
         ("2. Action with the engine", engineAction),
-        ("3. Action with the trunk", luggageAction),
+        ("3. Action with the trunk", payloadAction),
         ("4. Get car's info", porshe911GT3.printInfo),
         ("5. Get car's state", {porshe911GT3.printState()}),
         ("6. Exit", {isHandling = false})
