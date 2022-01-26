@@ -105,7 +105,7 @@ struct TruckVehicle {
     
 }
 
-struct SportCar {
+struct SportCarStruct {
     let manufacturer: String
     let model: String
     let year: Int
@@ -198,14 +198,14 @@ struct SportCar {
     
 }
 
-func handleSportCar() -> Void {
+func handleSportCarStruct() -> Void {
     print("We are going to hanging over with a nice sport car!")
     
     var isHandling: Bool = true
     
     // https://auto.ru/catalog/cars/porsche/911_gt3/22776686/22776768/specifications/
     let porsheEngine: Engine = Engine(engineNumber: "741490", gasType: .Gasoline, ignitionType: .SparkIgnition, combustionChamberVolume: 3996, cylinders: 6, cylinderConfig: .Opposed, maxPower: (510, 8400), maxTorque: (470, 6100))
-    var porshe911GT3: SportCar = SportCar(manufacturer: "Porshe", model: "911 GT3 (992 body)", year: 2021, trunkVolume: 132, driveLayout: .Rear, enginePosition: .Rear, engine: porsheEngine)
+    var porshe911GT3: SportCarStruct = SportCarStruct(manufacturer: "Porshe", model: "911 GT3 (992 body)", year: 2021, trunkVolume: 132, driveLayout: .Rear, enginePosition: .Rear, engine: porsheEngine)
     
     let glassAction: () -> Void = {
         let message: String = "Please, write what you want to do (\(GlassWindowAction.Raise.rawValue)/\(GlassWindowAction.Lower.rawValue)):"
@@ -273,5 +273,5 @@ func handleSportCar() -> Void {
 }
 
 let lesson3: Array<(String, () -> Void)> = [
-    ("1. All six tasks in one handling of a sport car", handleSportCar)
+    ("1. All six tasks in one handling of a sport car", handleSportCarStruct)
 ]

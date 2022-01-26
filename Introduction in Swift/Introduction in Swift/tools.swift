@@ -112,16 +112,14 @@ func getOrdinal(number: Int) -> String {
     }
 }
 
-func homeworkPresentation(for lesson: Int, homework: Array<(description: String, task: () -> Void)>) -> Void {
-    let stopWord: String = "exit"
+func actionsPresentation(welcome message: String, stopIs stopWord: String, actions: Array<(description: String, task: () -> Void)>) -> Void {
     let postfix: String = "Type '\(stopWord)' for exit."
-    let welcomeMessage: String = "This is the homework program for the \(getOrdinal(number: lesson)) lesson of the course. Please, choose the index of one of the following sub program:"
     
     var isContinue: Bool = true
-    var fullMessage: String = "\n" + welcomeMessage + "\n"
+    var fullMessage: String = "\n" + message + "\n"
     
-    for work in homework {
-        fullMessage += "\t" + work.description + "\n"
+    for action in actions {
+        fullMessage += "\t" + action.description + "\n"
     }
     
     fullMessage += postfix + "\n"
@@ -136,8 +134,8 @@ func homeworkPresentation(for lesson: Int, homework: Array<(description: String,
                 isContinue = false
             } else {
                 if let index = Int(input) {
-                    if index >= 1 && index <= homework.count {
-                        let task = homework[index - 1].task
+                    if index >= 1 && index <= actions.count {
+                        let task = actions[index - 1].task
                         task()
                     } else {
                         print("Wrong task index!")
@@ -151,4 +149,11 @@ func homeworkPresentation(for lesson: Int, homework: Array<(description: String,
         }
 
     } while isContinue
+}
+
+func homeworkPresentation(for lesson: Int, homework: Array<(description: String, task: () -> Void)>) -> Void {
+    let stopWord: String = "exit"
+    let welcomeMessage: String = "This is the homework program for the \(getOrdinal(number: lesson)) lesson of the course. Please, choose the index of one of the following sub program:"
+    
+    actionsPresentation(welcome: welcomeMessage, stopIs: stopWord, actions: homework)
 }
