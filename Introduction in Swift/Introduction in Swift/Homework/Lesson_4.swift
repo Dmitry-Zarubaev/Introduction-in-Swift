@@ -88,8 +88,6 @@ class Car {
         self.year = year >= 1886 ? year : nil // https://www.daimler.com/company/tradition/company-history/1885-1886.html
         self.manufacturer = manufacturer.isEmpty ? nil : manufacturer
         // </>
-        
-//        print(manufacturer, manufacturer.isEmpty, model, model.isEmpty, year, self.manufacturer, self.model, self.year)
 
         self.frame = frame
         self.engine = engine
