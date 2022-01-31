@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BA47479C27A3021B00B812D4 /* Lesson_5.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA47479B27A3021B00B812D4 /* Lesson_5.swift */; };
 		BA8288752797350600619F5B /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA8288742797350600619F5B /* main.swift */; };
 		BA82887C2797354B00619F5B /* tools.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA82887B2797354B00619F5B /* tools.swift */; };
 		BA82887F279735AC00619F5B /* Lesson_1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA82887E279735AC00619F5B /* Lesson_1.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BA47479B27A3021B00B812D4 /* Lesson_5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_5.swift; sourceTree = "<group>"; };
 		BA8288712797350600619F5B /* Introduction in Swift */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Introduction in Swift"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA8288742797350600619F5B /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		BA82887B2797354B00619F5B /* tools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tools.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 				BA828880279735BF00619F5B /* Lesson_2.swift */,
 				BA82888227973D2F00619F5B /* Lesson_3.swift */,
 				BA87F715279F029B001DD2EB /* Lesson_4.swift */,
+				BA47479B27A3021B00B812D4 /* Lesson_5.swift */,
 			);
 			path = Homework;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BA82888327973D2F00619F5B /* Lesson_3.swift in Sources */,
+				BA47479C27A3021B00B812D4 /* Lesson_5.swift in Sources */,
 				BA8288752797350600619F5B /* main.swift in Sources */,
 				BA82887F279735AC00619F5B /* Lesson_1.swift in Sources */,
 				BA828881279735BF00619F5B /* Lesson_2.swift in Sources */,
