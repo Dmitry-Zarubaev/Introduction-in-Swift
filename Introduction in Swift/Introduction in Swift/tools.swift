@@ -79,6 +79,10 @@ func getStringFromUserIf(message: String, where condition: (String) -> Bool) -> 
     return string!
 }
 
+func getStringFromUser(message: String) -> String {
+    return getStringFromUserIf(message: message, where: {_ in true})
+}
+
 func getOrdinal(number: Int) -> String {
     switch number {
         case 0:

@@ -289,7 +289,7 @@ func handleCars() -> Void {
     
     
     let porscheHandling: () -> Void = {
-        let porschePrimeActions: Array<(description: String, task: () -> Void)> = [1
+        let porschePrimeActions: Array<(description: String, task: () -> Void)> = [
             ("1. Perform an action with the Porsche", {porsche911GT3.doCarAction(do: getCarActionFromUser())}),
             ("2. Get info.", porsche911GT3.printInfo),
             ("3. Get status.", porsche911GT3.printState)
