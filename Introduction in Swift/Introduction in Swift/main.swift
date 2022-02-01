@@ -18,4 +18,7 @@ import Foundation
 //homeworkPresentation(for: 3, homework: lesson3)
 
 // Fourth lesson
-homeworkPresentation(for: 4, homework: lesson4)
+//homeworkPresentation(for: 4, homework: lesson4)
+
+// Fifth lesson
+homeworkPresentation(for: 5, homework: lesson5)
