@@ -14,6 +14,7 @@
 		BA828881279735BF00619F5B /* Lesson_2.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA828880279735BF00619F5B /* Lesson_2.swift */; };
 		BA82888327973D2F00619F5B /* Lesson_3.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA82888227973D2F00619F5B /* Lesson_3.swift */; };
 		BA87F716279F029B001DD2EB /* Lesson_4.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA87F715279F029B001DD2EB /* Lesson_4.swift */; };
+		BAC9ABD127AD5B650077EE65 /* Lesson_7.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC9ABD027AD5B650077EE65 /* Lesson_7.swift */; };
 		BAF1952427A822D600B3FD9A /* Lesson_6.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF1952327A822D600B3FD9A /* Lesson_6.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +39,7 @@
 		BA828880279735BF00619F5B /* Lesson_2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_2.swift; sourceTree = "<group>"; };
 		BA82888227973D2F00619F5B /* Lesson_3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_3.swift; sourceTree = "<group>"; };
 		BA87F715279F029B001DD2EB /* Lesson_4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_4.swift; sourceTree = "<group>"; };
+		BAC9ABD027AD5B650077EE65 /* Lesson_7.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_7.swift; sourceTree = "<group>"; };
 		BAF1952327A822D600B3FD9A /* Lesson_6.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lesson_6.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,6 +89,7 @@
 				BA87F715279F029B001DD2EB /* Lesson_4.swift */,
 				BA47479B27A3021B00B812D4 /* Lesson_5.swift */,
 				BAF1952327A822D600B3FD9A /* Lesson_6.swift */,
+				BAC9ABD027AD5B650077EE65 /* Lesson_7.swift */,
 			);
 			path = Homework;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 				BA47479C27A3021B00B812D4 /* Lesson_5.swift in Sources */,
 				BAF1952427A822D600B3FD9A /* Lesson_6.swift in Sources */,
 				BA8288752797350600619F5B /* main.swift in Sources */,
+				BAC9ABD127AD5B650077EE65 /* Lesson_7.swift in Sources */,
 				BA82887F279735AC00619F5B /* Lesson_1.swift in Sources */,
 				BA828881279735BF00619F5B /* Lesson_2.swift in Sources */,
 				BA87F716279F029B001DD2EB /* Lesson_4.swift in Sources */,

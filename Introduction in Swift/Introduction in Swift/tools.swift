@@ -155,9 +155,57 @@ func actionsPresentation(welcome message: String, stopIs stopWord: String, actio
     } while isContinue
 }
 
+func actionsPresentationAsync(welcome message: String, stopIs stopWord: String, actions: Array<(description: String, task: () async -> Void)>) -> Void {
+    let postfix: String = "Type '\(stopWord)' for exit."
+    
+    var isContinue: Bool = true
+    var fullMessage: String = "\n" + message + "\n"
+    
+    for action in actions {
+        fullMessage += "\t" + action.description + "\n"
+    }
+    
+    fullMessage += postfix + "\n"
+    
+    repeat {
+        print(fullMessage)
+
+        let rawInput: String? = readLine()
+        
+        if let input = rawInput {
+            if input == stopWord {
+                isContinue = false
+            } else {
+                if let index = Int(input) {
+                    if index >= 1 && index <= actions.count {
+                        let task = actions[index - 1].task
+                        Task {
+                            await task()
+                        }
+                    } else {
+                        print("Wrong task index!")
+                    }
+                } else {
+                    print("Unsupported input")
+                }
+            }
+        } else {
+            print("Unsupported input")
+        }
+
+    } while isContinue
+}
+
 func homeworkPresentation(for lesson: Int, homework: Array<(description: String, task: () -> Void)>) -> Void {
     let stopWord: String = "exit"
     let welcomeMessage: String = "This is the homework program for the \(getOrdinal(number: lesson)) lesson of the course. Please, choose the index of one of the following sub program:"
     
     actionsPresentation(welcome: welcomeMessage, stopIs: stopWord, actions: homework)
+}
+
+func homeworkPresentationAsync(for lesson: Int, homework: Array<(description: String, task: () async -> Void)>) -> Void {
+    let stopWord: String = "exit"
+    let welcomeMessage: String = "This is the homework program for the \(getOrdinal(number: lesson)) lesson of the course. Please, choose the index of one of the following sub program:"
+    
+    actionsPresentationAsync(welcome: welcomeMessage, stopIs: stopWord, actions: homework)
 }
