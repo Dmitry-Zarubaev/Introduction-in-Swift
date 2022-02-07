@@ -24,5 +24,8 @@ import Foundation
 //homeworkPresentation(for: 5, homework: lesson5)
 
 // Sixth lesson
-homeworkPresentation(for: 6, homework: lesson6)
+//homeworkPresentation(for: 6, homework: lesson6)
+
+// Seventh lesson
+homeworkPresentationAsync(for: 7, homework: lesson7)
 
