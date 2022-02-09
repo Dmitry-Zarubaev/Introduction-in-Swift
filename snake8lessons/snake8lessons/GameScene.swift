@@ -13,12 +13,23 @@ struct CollisionCategories {
     static let Snake: UInt32 = 0x1 << 0 // 0001 1
     static let SnakeHead: UInt32 = 0x1 << 1 // 0010 2
     static let Apple: UInt32 = 0x1 << 2 //0100 4
-    static let EdgeBody: UInt32 = 0x1 << 3 //1000 8
+    static let StageEdge: UInt32 = 0x1 << 3 //1000 8
 }
 
 class GameScene: SKScene {
     
     var snake: Snake?
+    
+    private func makeButton(name: String, position: CGPoint) -> SKShapeNode {
+        let button = SKShapeNode()
+        button.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 45, height: 45)).cgPath
+        button.position = position
+        button.fillColor = .gray
+        button.strokeColor = .gray
+        button.lineWidth = 10
+        button.name = name
+        return button
+    }
     
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
@@ -28,34 +39,22 @@ class GameScene: SKScene {
         view.showsPhysics = true
         
         
-        let counterClockWiseButton = SKShapeNode()
-        counterClockWiseButton.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 45, height: 45)).cgPath
-        counterClockWiseButton.position = CGPoint(x: view.scene!.frame.minX + 30, y: view.scene!.frame.minY + 30)
-        counterClockWiseButton.fillColor = .gray
-        counterClockWiseButton.strokeColor = .gray
-        counterClockWiseButton.lineWidth = 10
-        counterClockWiseButton.name = "counterClockWiseButton"
+        let counterClockWiseButton = makeButton(name: "counterClockWiseButton", position: CGPoint(x: view.scene!.frame.minX + 30, y: view.scene!.frame.minY + 30))
         self.addChild(counterClockWiseButton)
         
-        let clockwiseButton = SKShapeNode()
-        clockwiseButton.path = UIBezierPath(ovalIn: CGRect(x: 0, y: 0, width: 45, height: 45)).cgPath
-        clockwiseButton.position = CGPoint(x: view.scene!.frame.maxX - 80, y: view.scene!.frame.minY + 30)
-        clockwiseButton.fillColor = .gray
-        clockwiseButton.strokeColor = .gray
-        clockwiseButton.lineWidth = 10
-        clockwiseButton.name = "clockwiseButton"
+        let clockwiseButton = makeButton(name: "clockwiseButton", position: CGPoint(x: view.scene!.frame.maxX - 80, y: view.scene!.frame.minY + 30))
         self.addChild(clockwiseButton)
         
         createApple()
         
-        snake = Snake(atPoint: CGPoint(x: view.scene!.frame.midX, y: view.scene!.frame.midY))
+        snake = Snake(atPoint: CGPoint(x: view.scene!.frame.midX, y: view.scene!.frame.midY), stage: size)
         self.addChild(snake!)
         
         
         self.physicsWorld.contactDelegate = self
         
         
-        self.physicsBody?.categoryBitMask = CollisionCategories.EdgeBody
+        self.physicsBody?.categoryBitMask = CollisionCategories.StageEdge
         self.physicsBody?.collisionBitMask = CollisionCategories.Snake | CollisionCategories.SnakeHead
     }
     
@@ -103,12 +102,15 @@ class GameScene: SKScene {
         snake!.move()
     }
     
-    func createApple() {
-       // let randX = CGFloat(arc4random_uniform(UInt32(view!.scene!.frame.maxX - 5)))
+    private func makePoint() -> CGPoint {
         let randY = CGFloat(arc4random_uniform(UInt32(view!.scene!.frame.maxY - 5)))
         let randX = CGFloat(arc4random_uniform(UInt32(view!.scene!.frame.maxX - 5)))
         
-        let apple = Apple(position: CGPoint(x: randX, y: randY))
+        return CGPoint(x: randX, y: randY)
+    }
+    
+    func createApple() {
+        let apple = Apple(position: makePoint())
         self.addChild(apple)
     }
 }
@@ -117,21 +119,26 @@ class GameScene: SKScene {
 extension GameScene: SKPhysicsContactDelegate {
     
     func didBegin(_ contact: SKPhysicsContact) {
-        let bodyes = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask //6
-        let collisonOBject = bodyes - CollisionCategories.SnakeHead //6 - 2 = 4
+        let bodies = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask //6
+        let collisonOBject = bodies - CollisionCategories.SnakeHead //6 - 2 = 4
+        print("Collision between: \(contact.bodyA.node?.name ?? "unknown") and \(contact.bodyB.node?.name ?? "unknown")")
         
         switch collisonOBject {
-        case CollisionCategories.Apple:
-            let apple = contact.bodyA.node is Apple ? contact.bodyA.node : contact.bodyB.node
-            snake?.addBodyPart()
-            apple?.removeFromParent()
-            createApple()
-            
-        case CollisionCategories.EdgeBody: break
-            //hw
-        default:
-            break
-            
+            case CollisionCategories.Apple:
+                let apple = contact.bodyA.node is Apple ? contact.bodyA.node : contact.bodyB.node
+                snake?.addBodyPart()
+                apple?.removeFromParent()
+                createApple()
+            default:
+                break
+                
+        }
+        
+        if let nodeA = contact.bodyA.node, let nodeB = contact.bodyB.node {
+            if (nodeA.name == SnakePart.SnakeHead.rawValue && nodeB.name == SnakePart.SnakeTail.rawValue) {
+                print("SNAKE IS DEAD!!!")
+                snake?.die()
+            }
         }
         
     }

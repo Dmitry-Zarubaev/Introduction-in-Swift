@@ -8,11 +8,14 @@
 import UIKit
 
 class SnakeHead: SnakeBodyPart {
-    override init(atPoint point: CGPoint) {
-        super.init(atPoint: point)
+    override init(atPoint point: CGPoint, index _: Int) {
+        super.init(atPoint: point, index: 0)
+        
+        strokeColor = .blue
+        name = SnakePart.SnakeHead.rawValue
         
         self.physicsBody?.categoryBitMask = CollisionCategories.SnakeHead
-        self.physicsBody?.contactTestBitMask = CollisionCategories.EdgeBody | CollisionCategories.Snake | CollisionCategories.Apple
+        self.physicsBody?.contactTestBitMask = CollisionCategories.StageEdge | CollisionCategories.Snake | CollisionCategories.Apple
     }
     
     required init?(coder aDecoder: NSCoder) {
