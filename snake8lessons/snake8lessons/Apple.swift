@@ -17,6 +17,7 @@ class Apple: SKShapeNode {
         fillColor = UIColor.red
         strokeColor = UIColor.red
         lineWidth = 5
+        name = "Apple"
         self.position = position
         
         self.physicsBody = SKPhysicsBody(circleOfRadius: 10.0, center: CGPoint(x: 5, y: 5))
